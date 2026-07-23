@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Customer Registration System</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="bg-gradient"></div>
+<div class="bg-orbs">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="orb orb-3"></span>
+  <span class="orb orb-4"></span>
+</div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark"><i class="fa-solid fa-id-card-clip"></i></span>
+    <div class="brand-text">
+      <strong>Smart Customer Registration</strong>
+      <small>Onboard new customers in minutes</small>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <a href="../admin/index.html" class="ghost-btn"><i class="fa-solid fa-gauge"></i> Admin</a>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- Progress -->
+  <div class="progress-wrap glass">
+    <div class="progress-head">
+      <span>Registration progress</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-track">
+      <div id="progressBar" class="progress-fill"></div>
+    </div>
+    <div class="progress-steps" id="progressSteps">
+      <span class="step active" data-step="personal">Personal</span>
+      <span class="step" data-step="contact">Contact</span>
+      <span class="step" data-step="address">Address</span>
+      <span class="step" data-step="work">Work</span>
+      <span class="step" data-step="ids">ID Proof</span>
+      <span class="step" data-step="uploads">Uploads</span>
+      <span class="step" data-step="reference">Reference</span>
+    </div>
+  </div>
+
+  <form id="registrationForm" class="form-card glass" novalidate autocomplete="off">
+    <input type="hidden" name="csrf_token" id="csrfToken" value="">
+
+    <div class="form-header">
+      <h1>Customer Registration Form</h1>
+      <p>Fill in the details below — fields marked <span class="req">*</span> are mandatory.</p>
+      <div class="customer-id-preview">
+        <i class="fa-solid fa-hashtag"></i>
+        Customer ID will be auto-generated on submit (e.g. <strong>CUS0001</strong>)
+      </div>
+    </div>
+
+    <!-- Section: Personal -->
+    <section class="form-section" id="personal" data-step="personal">
+      <h2><i class="fa-solid fa-user"></i> Personal Details</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="full_name">Full Name <span class="req">*</span></label>
+          <input type="text" id="full_name" name="full_name" placeholder="e.g. Arun Kumar" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="father_name">Father's Name <span class="req">*</span></label>
+          <input type="text" id="father_name" name="father_name" placeholder="e.g. Ramesh Kumar" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="gender">Gender <span class="req">*</span></label>
+          <select id="gender" name="gender" required>
+            <option value="">Select gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="dob">Date of Birth <span class="req">*</span></label>
+          <input type="date" id="dob" name="dob" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="age">Age (auto-calculated)</label>
+          <input type="text" id="age" name="age" placeholder="—" readonly>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Contact -->
+    <section class="form-section" id="contact" data-step="contact">
+      <h2><i class="fa-solid fa-phone"></i> Contact Details</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="mobile_number">Mobile Number <span class="req">*</span></label>
+          <input type="tel" id="mobile_number" name="mobile_number" maxlength="10" placeholder="10-digit mobile" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="whatsapp_number">
+            WhatsApp Number <span class="req">*</span>
+            <label class="mini-check"><input type="checkbox" id="sameAsMobile"> Same as mobile</label>
+          </label>
+          <input type="tel" id="whatsapp_number" name="whatsapp_number" maxlength="10" placeholder="10-digit WhatsApp number" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="name@example.com" required>
+          <small class="error-msg"></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Address -->
+    <section class="form-section" id="address" data-step="address">
+      <h2><i class="fa-solid fa-location-dot"></i> Address Details</h2>
+      <div class="grid">
+        <div class="field span-2">
+          <label for="address">Address <span class="req">*</span></label>
+          <textarea id="address" name="address" rows="2" placeholder="House no, street, area" required></textarea>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="city" placeholder="e.g. Madurai" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="district">District <span class="req">*</span></label>
+          <input type="text" id="district" name="district" placeholder="e.g. Madurai" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="state">State <span class="req">*</span></label>
+          <input type="text" id="state" name="state" placeholder="e.g. Tamil Nadu" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="pincode">Pincode <span class="req">*</span></label>
+          <input type="text" id="pincode" name="pincode" maxlength="6" placeholder="6-digit pincode" required>
+          <small class="error-msg"></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Work -->
+    <section class="form-section" id="work" data-step="work">
+      <h2><i class="fa-solid fa-briefcase"></i> Work &amp; Preference</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="occupation">Occupation <span class="req">*</span></label>
+          <input type="text" id="occupation" name="occupation" placeholder="e.g. Business, Salaried" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="company_name">Company Name</label>
+          <input type="text" id="company_name" name="company_name" placeholder="Optional">
+        </div>
+        <div class="field">
+          <label for="annual_income">Annual Income</label>
+          <select id="annual_income" name="annual_income">
+            <option value="">Select range</option>
+            <option value="Below 1L">Below ₹1,00,000</option>
+            <option value="1L-3L">₹1,00,000 - ₹3,00,000</option>
+            <option value="3L-5L">₹3,00,000 - ₹5,00,000</option>
+            <option value="5L-10L">₹5,00,000 - ₹10,00,000</option>
+            <option value="Above 10L">Above ₹10,00,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="preferred_language">Preferred Language</label>
+          <select id="preferred_language" name="preferred_language">
+            <option value="">Select language</option>
+            <option value="Tamil">Tamil</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="customer_category">Customer Category</label>
+          <select id="customer_category" name="customer_category">
+            <option value="">Select category</option>
+            <option value="Regular">Regular</option>
+            <option value="Premium">Premium</option>
+            <option value="VIP">VIP</option>
+            <option value="Corporate">Corporate</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: ID Proof -->
+    <section class="form-section" id="ids" data-step="ids">
+      <h2><i class="fa-solid fa-address-card"></i> Identity Details</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="aadhar_number">Aadhar Number <span class="req">*</span></label>
+          <input type="text" id="aadhar_number" name="aadhar_number" maxlength="12" placeholder="12-digit Aadhar number" required>
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="pan_number">PAN Number <span class="req">*</span></label>
+          <input type="text" id="pan_number" name="pan_number" maxlength="10" placeholder="e.g. ABCDE1234F" required style="text-transform:uppercase;">
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="gst_number">GST Number (Optional)</label>
+          <input type="text" id="gst_number" name="gst_number" maxlength="15" placeholder="15-digit GSTIN" style="text-transform:uppercase;">
+          <small class="error-msg"></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Uploads -->
+    <section class="form-section" id="uploads" data-step="uploads">
+      <h2><i class="fa-solid fa-cloud-arrow-up"></i> Document Uploads</h2>
+      <div class="grid uploads-grid">
+        <div class="upload-field">
+          <label>Photo <span class="req">*</span></label>
+          <div class="upload-box" data-target="photo">
+            <img class="preview-img" id="photoPreview" alt="">
+            <i class="fa-solid fa-camera upload-icon"></i>
+            <span>Click or drag JPG/PNG (max 2MB)</span>
+            <input type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png" hidden required>
+            <div class="upload-progress"><div class="upload-progress-fill"></div></div>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+        <div class="upload-field">
+          <label>ID Proof <span class="req">*</span></label>
+          <div class="upload-box" data-target="id_proof">
+            <img class="preview-img" id="id_proofPreview" alt="">
+            <i class="fa-solid fa-file-shield upload-icon"></i>
+            <span>Click or drag JPG/PNG (max 2MB)</span>
+            <input type="file" id="id_proof" name="id_proof" accept=".jpg,.jpeg,.png" hidden required>
+            <div class="upload-progress"><div class="upload-progress-fill"></div></div>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+        <div class="upload-field">
+          <label>Signature <span class="req">*</span></label>
+          <div class="upload-box" data-target="signature">
+            <img class="preview-img" id="signaturePreview" alt="">
+            <i class="fa-solid fa-signature upload-icon"></i>
+            <span>Click or drag JPG/PNG (max 2MB)</span>
+            <input type="file" id="signature" name="signature" accept=".jpg,.jpeg,.png" hidden required>
+            <div class="upload-progress"><div class="upload-progress-fill"></div></div>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Reference -->
+    <section class="form-section" id="reference" data-step="reference">
+      <h2><i class="fa-solid fa-user-group"></i> Reference &amp; Source</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="reference_name">Reference Name</label>
+          <input type="text" id="reference_name" name="reference_name" placeholder="Optional">
+        </div>
+        <div class="field">
+          <label for="reference_mobile">Reference Mobile</label>
+          <input type="tel" id="reference_mobile" name="reference_mobile" maxlength="10" placeholder="Optional">
+          <small class="error-msg"></small>
+        </div>
+        <div class="field">
+          <label for="source">How did you hear about us?</label>
+          <select id="source" name="source">
+            <option value="Instagram">Instagram</option>
+            <option value="Facebook">Facebook</option>
+            <option value="WhatsApp">WhatsApp</option>
+            <option value="Google">Google</option>
+            <option value="Friend">Friend</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field span-2">
+          <label for="remarks">Remarks</label>
+          <textarea id="remarks" name="remarks" rows="2" placeholder="Anything else worth noting"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terms -->
+    <div class="terms-row">
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="terms" name="terms" required>
+        <span class="custom-checkbox"></span>
+        I agree to the <a href="#" id="openTerms">Terms &amp; Conditions</a> <span class="req">*</span>
+      </label>
+      <small class="error-msg" id="termsError"></small>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="reset" id="resetBtn" class="btn btn-ghost"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+      <button type="submit" id="submitBtn" class="btn btn-primary">
+        <span class="btn-label"><i class="fa-solid fa-paper-plane"></i> Submit Registration</span>
+        <span class="btn-loader"><i class="fa-solid fa-spinner fa-spin"></i> Submitting…</span>
+      </button>
+    </div>
+    <p class="draft-note"><i class="fa-solid fa-floppy-disk"></i> Your progress is auto-saved as a draft on this device.</p>
+  </form>
+
+</main>
+
+<!-- Success overlay -->
+<div class="overlay" id="successOverlay">
+  <div class="success-card glass">
+    <div class="success-anim">
+      <svg viewBox="0 0 100 100"><circle class="success-circle" cx="50" cy="50" r="45"/><path class="success-check" d="M28 52 l16 16 l28 -34"/></svg>
+    </div>
+    <h2>Registration Successful!</h2>
+    <p>Customer ID: <strong id="resultCustomerId">—</strong></p>
+    <p>Registration No: <strong id="resultRegNo">—</strong></p>
+    <div class="success-actions">
+      <a id="viewReceiptBtn" class="btn btn-primary" href="#" target="_blank"><i class="fa-solid fa-receipt"></i> View Receipt</a>
+      <button id="closeSuccessBtn" class="btn btn-ghost" type="button">Register Another</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset confirmation -->
+<div class="overlay" id="resetOverlay">
+  <div class="confirm-card glass">
+    <i class="fa-solid fa-triangle-exclamation confirm-icon"></i>
+    <h3>Clear the form?</h3>
+    <p>This will remove all entered data and the saved draft.</p>
+    <div class="success-actions">
+      <button id="confirmResetBtn" class="btn btn-danger" type="button">Yes, clear it</button>
+      <button id="cancelResetBtn" class="btn btn-ghost" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loader-ring"></div>
+  <p>Loading Smart Registration…</p>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
